@@ -30,14 +30,20 @@ struct ContentView: View {
                     
                     Text("Total Score: \(playerScore)")
                         .font(.headline)
+                        .foregroundColor(.mint)
                 }
                 
                 Section("Used Words") {
                     ForEach(usedWords, id:\.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle")
+                                .foregroundColor(.mint)
+                            
                             Text("+")
+                            
                             Image(systemName: "2.circle")
+                                .foregroundColor(.mint)
+                            
                             Text(word)
                         }
                     }
