@@ -11,6 +11,9 @@ struct ContentView: View {
     @State private var usedWords = [String]()
     @State private var rootWord = ""
     @State private var newWord = ""
+    @State private var errorTitle = ""
+    @State private var errorMessage = ""
+    @State private var showingError = false
     
     var body: some View {
         NavigationView {
@@ -32,6 +35,11 @@ struct ContentView: View {
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
+            .alert(errorTitle, isPresented: $showingError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage)
+            }
         }
     }
     
@@ -41,6 +49,21 @@ struct ContentView: View {
         
         // exit if the remaining string is empty
         guard answer.count > 0 else { return }
+        
+        guard isOriginal(word: answer) else {
+            wordError(title: "Word Used Already", message: "Try again with a different word 🙃")
+            return
+        }
+        
+        guard isPossible(word: answer) else {
+            wordError(title: "Word Not Possible", message: "You can't spell that word from \(rootWord)!")
+            return
+        }
+        
+        guard isReal(word: answer) else {
+            wordError(title: "Word Not Recognized", message: "Needs to be an actual English word!")
+            return
+        }
         
         withAnimation {
             usedWords.insert(answer, at: 0)
@@ -90,6 +113,12 @@ struct ContentView: View {
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
         
         return misspelledRange.location == NSNotFound
+    }
+    
+    func wordError(title: String, message: String) {
+        errorTitle = title
+        errorMessage = message
+        showingError = true
     }
 }
 
