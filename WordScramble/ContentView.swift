@@ -35,6 +35,9 @@ struct ContentView: View {
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
+            .toolbar {
+                Button("Restart", action: startGame)
+            }
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -90,7 +93,7 @@ struct ContentView: View {
     }
     
     func isOriginal(word: String) -> Bool {
-        !usedWords.contains(word)
+        !usedWords.contains(word) && word != rootWord
     }
     
     func isPossible(word: String) -> Bool {
