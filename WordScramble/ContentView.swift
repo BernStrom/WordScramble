@@ -14,25 +14,36 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     @State private var showingError = false
+    @State private var playerScore = 0
     
     var body: some View {
         NavigationView {
             List {
-                Section {
-                    TextField("Enter your word", text: $newWord)
-                        .textInputAutocapitalization(.never)
+                Section("Starter Word") {
+                    Text(rootWord)
+                        .font(.largeTitle)
                 }
                 
-                Section {
+                Section("Your Answer") {
+                    TextField("Enter your word", text: $newWord)
+                        .textInputAutocapitalization(.never)
+                    
+                    Text("Total Score: \(playerScore)")
+                        .font(.headline)
+                }
+                
+                Section("Used Words") {
                     ForEach(usedWords, id:\.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle")
+                            Text("+")
+                            Image(systemName: "2.circle")
                             Text(word)
                         }
                     }
                 }
             }
-            .navigationTitle(rootWord)
+            .navigationTitle("WordScramble")
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
             .toolbar {
@@ -68,6 +79,8 @@ struct ContentView: View {
             return
         }
         
+        addScore(word: answer)
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
@@ -84,6 +97,8 @@ struct ContentView: View {
                 let allWords = starterWords.components(separatedBy: "\n")
                 // 4. Pick one random word, or use "silkworm" as a sensible default
                 rootWord = allWords.randomElement() ?? "silkworm"
+                playerScore = 0
+                usedWords = [String]()
                 // Exit here if everything above has worked
                 return
             }
@@ -122,6 +137,10 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func addScore(word: String) {
+        playerScore += word.count + 2
     }
 }
 
