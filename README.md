@@ -30,6 +30,10 @@ There are a total of 3 conditions built into the game where it will check every 
 
 To start a new round with a new random word, players can simply tap on the Restart button at the top right of the app. The list of previously used words are not being stored so every new game round will also removed any words used in the previous game round.
 
+## App preview
+
+https://user-images.githubusercontent.com/65307853/182373101-bb3564a2-6d27-4dc9-b346-61c5d4995e62.mp4
+
 ## Trying it yourself
 
 WordScramble is written using Xcode 13.2 and Swift 5.0. To try it out, you can clone this project and build it immediately by opening `WordScramble.xcodeproj`.
